@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useParams } from 'react-router';
 import { useFormik } from 'formik';
 import InputMask from 'react-input-mask';
@@ -11,7 +11,9 @@ import {
   Input, 
   Row, 
   Col, 
-  CustomInput 
+  CustomInput,
+  Alert,
+  Spinner 
 } from 'reactstrap';
 
 import GenerateAlert from '../GenerateAlert';
@@ -48,6 +50,7 @@ const FormRegister = (props) => {
   const [ submit, setSubmit ] = useState(false)
   const [ isValid, setIsValid ] = useState(false)
   const [ validDriver, setValidDriver ] = useState(false)
+  const [ loading, setLoading ] = useState(false)
   
   const {driverId} = useParams();
 
@@ -62,20 +65,26 @@ const FormRegister = (props) => {
     },
     validationSchema
   });
-  
-  if (driverId !== undefined && validDriver === false) {
-    FirebaseService.getUniqueDataBy('drivers', driverId, driver => {
-      if (driver !== null) {
-        formik.values.name = driver.name
-        formik.values.telephone = driver.telephone
-        formik.values.born_date = driver.born_date
-        formik.values.cnh = driver.cnh
-        formik.values.cnh_type = driver.cnh_type
-        formik.values.cpf = driver.cpf
-        setValidDriver(true)
-      }
-    });
-  }
+
+  useEffect(() => {
+    if (driverId !== undefined && validDriver === false) {
+      setLoading(true)
+      FirebaseService.getUniqueDataBy('drivers', driverId, driver => {
+        if (driver !== null) {
+          if (Object.values(driver).length > 0) {
+            formik.values.name = driver.name
+            formik.values.telephone = driver.telephone
+            formik.values.born_date = driver.born_date
+            formik.values.cnh = driver.cnh
+            formik.values.cnh_type = driver.cnh_type
+            formik.values.cpf = driver.cpf
+            setValidDriver(true)
+          }
+        }
+        setLoading(false)
+      });
+    }
+  }, [driverId, validDriver, formik]);
 
 
   const DisplayErrors = (props) => {
@@ -91,6 +100,7 @@ const FormRegister = (props) => {
 
   const onSubmit = (e) => {
     e.preventDefault()
+    setLoading(true)
     setSubmit(true)
     
     if (formik.values.cnh_type !== "") {
@@ -102,6 +112,7 @@ const FormRegister = (props) => {
 
     if (Object.keys(errors).length > 0 || values.name === "" ) {
       setIsValid(false)
+      setLoading(false)
       return;
     }
 
@@ -111,7 +122,7 @@ const FormRegister = (props) => {
     const telephone = values.telephone
     const cnh = values.cnh
     const cnh_type = values.cnh_type
-    const active = true
+    const active = 1
 
     let object = {
       name,
@@ -128,6 +139,7 @@ const FormRegister = (props) => {
       FirebaseService.editData('drivers', driverId, object)
       .then(() => {
         setIsValid(true)
+        setLoading(false)
       })
       return;
     } 
@@ -136,17 +148,25 @@ const FormRegister = (props) => {
 
     if (id !== undefined) {
       setIsValid(true)
+      setLoading(false)
     }
   }
 
   if (!validDriver && driverId !== undefined) {
     return (
-      <p>Não foi encontrado nenhum motorista...</p>
+      <Alert className="not-found" color="secondary">
+        Não foi encontrado nenhum motorista.
+      </Alert>
     );
   }
 
   return (
     <>
+    {loading &&
+      <div className="loading">
+        <Spinner style={{ width: '3rem', height: '3rem' }} />
+      </div> 
+    }
     <Form onSubmit={onSubmit} id="form-register">
       <GenerateAlert submitResult={submit} isValid={isValid}/>
       <FormGroup>

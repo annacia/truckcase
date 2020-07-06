@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
-import { Table, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import { Table, Pagination, PaginationItem, PaginationLink, Alert } from 'reactstrap';
 import ListDriverItem from '../../components/ListDriverItem'
 
 import './index.styl'
 
 const ListDrivers = (props) => {
   const [ currentPage, setCurrentPage ] = useState(0)
-  const { drivers } = props
+  const { drivers, loading } = props
 
   const data = Object.keys(drivers)
   const pageSize = 5
@@ -17,12 +17,25 @@ const ListDrivers = (props) => {
     setCurrentPage(index)
   }
 
+  if (loading) {
+    return (
+      <></>
+    )
+  }
+
+  if (drivers.length === 0) {
+    return (
+      <Alert className="not-found" color="secondary">
+        Não foi encontrado nenhum motorista.
+      </Alert>
+    )
+  }
+
   return (
     <>
     <Table responsive borderless striped className="list-drivers">
       <thead>
         <tr>
-          <th>ID</th>
           <th>Nome</th>
           <th>Ação</th>
         </tr>

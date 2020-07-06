@@ -10,7 +10,8 @@ import {
     FormGroup,
     Label,
     Input,
-    CustomInput  
+    CustomInput ,
+    Spinner 
 } from 'reactstrap';
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -25,6 +26,7 @@ const List = () => {
     const [ result, setResult ] = useState([])
     const [ driversList, setDriversList] = useState([]) 
     const [ isSubmit, setIsSubmit ] = useState(false)
+    const [ loading, setLoading ] = useState(true)
 
     const [modal, setModal] = useState(false);
     const toggle = () => setModal(!modal);
@@ -41,6 +43,7 @@ const List = () => {
     useEffect(() => {
         if (!isSubmit) {
             FirebaseService.getDataListWhere('drivers', 'active', 1, snp => {
+                setLoading(false)
                 setDriversList(snp)
                 setResult(snp)
             }, 1000)
@@ -49,6 +52,7 @@ const List = () => {
 
     const onSubmit = (e) => {
         e.preventDefault()
+        setLoading(true)
         toggle()
         setIsSubmit(true)
         setResult(driversList)
@@ -96,10 +100,12 @@ const List = () => {
             }
         }
         setResult(resultfilter)
+        setLoading(false)
     }
 
     const onClear = (e) => {
         e.preventDefault()
+        setLoading(true)
         toggle()
         formik.values.name = '' 
         formik.values.cnh = '' 
@@ -108,6 +114,7 @@ const List = () => {
 
         setIsSubmit(false)
         setResult(driversList)
+        setLoading(false)
     }
     
     return(
@@ -182,7 +189,12 @@ const List = () => {
                 <Button onClick={toggle}><FontAwesomeIcon icon={faFilter} title="Filtrar"/></Button>
                 <span>Filtrar</span>
             </div>
-            {result && <ListDrivers drivers={result}/>}
+            {loading === true &&
+            <div className="loading">
+                <Spinner style={{ width: '3rem', height: '3rem' }} />
+            </div>
+            }
+            {result && <ListDrivers drivers={result} loading={loading}/>}
         </div>
     )
 };

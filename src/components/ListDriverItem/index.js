@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Collapse } from 'reactstrap';
+import { Collapse, Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import FirebaseService from '../../services/FirebaseService'
 
@@ -12,18 +12,18 @@ const ListDriverItem = (props) => {
     const { content } = props
     const [ collapse, setCollapse ] = useState(false)
 
+    const [modal, setModal] = useState(false);
+    const toggleModal = () => setModal(!modal);
+
     const toggleView = () => {
         setCollapse(!collapse)
     }
 
     const inactiveItem = () => {
-        content.active = false
+        content.active = 0
         FirebaseService.editData('drivers', content.key, content)
         .then(() => {
-            console.log("deu tudo certo")
-        })
-        .catch(() => {
-            console.log("deu tudo errado")
+            toggleModal()
         })
     }
 
@@ -31,7 +31,6 @@ const ListDriverItem = (props) => {
     return (
         <>
         <tr>
-            <th scope="row" colSpan="1">{content.key}</th>
             <td>{content.name}</td>
             <td>
                 <button className="icon" onClick={toggleView}>
@@ -40,11 +39,21 @@ const ListDriverItem = (props) => {
 
                 </button>
                 <Link className="icon" to={"/register/"+content.key}><FontAwesomeIcon title="Editar" icon={faEdit} /></Link>
-                <button className="icon" onClick={inactiveItem}><FontAwesomeIcon title="Desativar" icon={faTrashAlt} /></button>
+                <button className="icon" onClick={toggleModal}><FontAwesomeIcon title="Desativar" icon={faTrashAlt} /></button>
             </td>
         </tr>
         <tr>
-            <td colSpan="3">
+            <td colSpan="2">
+                <Modal isOpen={modal} toggle={toggleModal} className="modal-inactive">
+                    <ModalHeader toggle={toggleModal}>Inativar Registro</ModalHeader>
+                    <ModalBody>
+                        Tem certeza que deseja inativar o registro?
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button onClick={inactiveItem} className="btn-inactive">Sim</Button>{' '}
+                        <Button onClick={toggleModal} className="btn-cancel">Cancelar</Button>
+                    </ModalFooter>
+                </Modal>
                 <Collapse isOpen={collapse} className="driver-view">
                     <p className="title-driver"><span className="title">Nome:</span>{content.name}</p>
                     <p className="att-driver"><span className="title">CPF:</span> {content.cpf}</p>
