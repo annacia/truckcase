@@ -2,6 +2,9 @@
 
 Este repositório possui um sistema de cadastro de motoristas brasileiros baseado em um [case](./public/case.pdf) da empresa TruckPad.
 
+Esse sistema pode ser acessado nesse link:
+https://truckcase.netlify.app/
+
 ****
 ## :books: Índice
 
