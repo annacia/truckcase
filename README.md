@@ -24,7 +24,7 @@ Este repositório possui um sistema de cadastro de motoristas brasileiros basead
 ****
 <div id='tecnologias'/>
 
-## :books: Tecnologias utilizadas
+## :wrench: Tecnologias utilizadas
 
 - [x] ReactJS
 - [x] Reactstrap
