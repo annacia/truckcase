@@ -39,7 +39,7 @@ const ListDriverItem = (props) => {
 
                 </button>
                 <Link className="icon" to={"/register/"+content.key}><FontAwesomeIcon title="Editar" icon={faEdit} /></Link>
-                <button className="icon" onClick={toggleModal}><FontAwesomeIcon title="Desativar" icon={faTrashAlt} /></button>
+                <button className="icon inactive" onClick={toggleModal}><FontAwesomeIcon title="Desativar" icon={faTrashAlt} /></button>
             </td>
         </tr>
         <tr>

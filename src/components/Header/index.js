@@ -47,7 +47,7 @@ export default class Header extends Component {
       <div>
         <Navbar id="menu" light expand="md">
           <NavbarBrand href="/">Motoristas Brasileiros</NavbarBrand>
-          <NavbarToggler onClick={this.toggle} />
+          <NavbarToggler className="btn-menu" onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               {links.map(createNavItem)}

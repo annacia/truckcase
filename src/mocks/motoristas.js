@@ -1,6 +1,6 @@
 export const MOTORISTAS = {
     1:{
-        name: "Anna Carolina Inhasz Aureliano",
+        name: "Anna Carolina",
         telephone: "(11) 3669-5687",
         born_date: "1996-05-21",
         cnh: "45687612545",
@@ -9,7 +9,7 @@ export const MOTORISTAS = {
         active: "true"
     },
     2:{
-        name: "Jan Nicolas Tenório Vieira Lima",
+        name: "Jan Nicolas",
         telephone: "(11) 3669-5687",
         born_date: "1996-05-02",
         cnh: "45687612545",
@@ -27,7 +27,7 @@ export const MOTORISTAS = {
         active: "true"
     },
     4:{
-        name: "Anna Carolina Inhasz Aureliano",
+        name: "Anna Carolina",
         telephone: "(11) 3669-5687",
         born_date: "1996-05-02",
         cnh: "45687612545",
@@ -36,7 +36,7 @@ export const MOTORISTAS = {
         active: "true"
     },
     5:{
-        name: "Jan Nicolas Tenório Vieira Lima",
+        name: "Jan Nicolas",
         telephone: "(11) 3669-5687",
         born_date: "1996-05-02",
         cnh: "45687612545",

@@ -36,7 +36,7 @@ https://truckcase.netlify.app/
 - [x] React Router
 - [x] Formik
 - [x] Yup
-- [ ] Jest
+- [x] Jest
 - [x] Firebase
 - [x] Netlify
 
